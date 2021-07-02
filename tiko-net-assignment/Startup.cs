@@ -44,7 +44,7 @@ namespace tiko_net_assignment
                     {
                         Email="suleyman_gumus@outlook.com.tr",
                         Name="Suleyman GUMUS",
-                        Url= new Uri("https://www.instagram.com/sulaiman_gms/")
+                        Url= new Uri("https://www.linkedin.com/in/sulaiman-gms")
                     }
                 });
             });
