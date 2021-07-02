@@ -1,27 +1,27 @@
-﻿using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Dapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using tiko_net_assignment.Models;
 using tiko_net_assignment.Services;
 
 namespace tiko_net_assignment.Controllers
 {
-    public class HouseController : Controller
+    [Route("[controller]")]
+    [ApiController]
+    public class HouseController : ControllerBase
     {
-        private readonly Dapperr _dapper;
+        private readonly IDapper _dapper;
 
-        public HouseController(Dapperr dapper)
+        public HouseController(IDapper dapper)
         {
             _dapper = dapper;
         }
 
         // GET: House
+        [HttpGet]
         public async Task<IActionResult> GetHouses()
         {
-            var result = await Task.FromResult(_dapper.List<House>("Select * FROM Houses"));
+            var result = await Task.FromResult(_dapper.List<House>("Select * FROM Houses WHERE IsDeleted = 0"));
             if (result == null)
             {
                 return NotFound();
@@ -30,12 +30,13 @@ namespace tiko_net_assignment.Controllers
         }
 
         // GET: House/ByAgent/5
-        [Route("ByAgent/{ id ]")]
+        [Route("ByAgent/{id}")]
+        [HttpGet]
         public async Task<IActionResult> GetHousesByAgent(int id)
         {
             var dbParams = new DynamicParameters();
             dbParams.Add("@AgentId", id);
-            var result = await Task.FromResult(_dapper.ListWithParameters<House>("Select * FROM Houses WHERE AgentId = @AgentId", dbParams));
+            var result = await Task.FromResult(_dapper.ListWithParameters<House>("Select * FROM Houses WHERE AgentId = @AgentId AND IsDeleted = 0", dbParams));
             if (result == null)
             {
                 return NotFound();
@@ -44,12 +45,13 @@ namespace tiko_net_assignment.Controllers
         }
 
         // GET: House/ByCity/5
-        [Route("ByCity/{ id ]")]
+        [Route("ByCity/{id}")]
+        [HttpGet]
         public async Task<IActionResult> GetHousesByCity(int id)
         {
             var dbParams = new DynamicParameters();
             dbParams.Add("@CityId", id);
-            var result = await Task.FromResult(_dapper.ListWithParameters<House>("Select * FROM Houses WHERE CityId = @CityId", dbParams));
+            var result = await Task.FromResult(_dapper.ListWithParameters<House>("Select * FROM Houses WHERE CityId = @CityId AND IsDeleted = 0", dbParams));
             if (result == null)
             {
                 return NotFound();
@@ -111,7 +113,7 @@ namespace tiko_net_assignment.Controllers
             {
                 var dbParams = new DynamicParameters();
                 dbParams.Add("@Id", id);
-                var result = await Task.FromResult(_dapper.IO<int>("DELETE FROM Houses WHERE Id = @Id", null));
+                var result = await Task.FromResult(_dapper.IO<int>("UPDATE Houses SET IsDeleted = 1 WHERE Id = @Id", null));
 
                 return Ok(result);
             }

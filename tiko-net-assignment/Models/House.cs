@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace tiko_net_assignment.Models
 {
@@ -20,6 +17,7 @@ namespace tiko_net_assignment.Models
         [Required]
         [Range(0, 10, ErrorMessage = "BedroomCount Must be between 0 to 10")]
         public int BedroomCount { get; set; }
+        public bool IsDeleted { get; set; }
         [Required]
         public int CityId { get; set; }
         [Required]

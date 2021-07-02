@@ -1,24 +1,24 @@
-﻿using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Dapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using tiko_net_assignment.Models;
 using tiko_net_assignment.Services;
 
 namespace tiko_net_assignment.Controllers
 {
-    public class CityController : Controller
+    [Route("[controller]")]
+    [ApiController]
+    public class CityController : ControllerBase
     {
-        private readonly Dapperr _dapper;
+        private readonly IDapper _dapper;
 
-        public CityController(Dapperr dapper)
+        public CityController(IDapper dapper)
         {
             _dapper = dapper;
         }
 
         // GET: City
+        [HttpGet]
         public async Task<IActionResult> GetCities()
         {
             var result = await Task.FromResult(_dapper.List<City>("Select * FROM Cities"));

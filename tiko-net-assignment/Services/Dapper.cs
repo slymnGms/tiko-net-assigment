@@ -1,5 +1,5 @@
 ﻿using Dapper;
-using Microsoft.Data.Sqlite;
+using System.Data.SQLite;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -32,20 +32,20 @@ namespace tiko_net_assignment.Services
 
         public List<T> List<T>(string query)
         {
-            using IDbConnection db = new SqliteConnection(_config.GetConnectionString(Connectionstring));
+            using IDbConnection db = new SQLiteConnection(_config.GetConnectionString(Connectionstring));
             return db.Query<T>(query, commandType: CommandType.Text).ToList();
         }
 
         public List<T> ListWithParameters<T>(string query, DynamicParameters parameters)
         {
-            using IDbConnection db = new SqliteConnection(_config.GetConnectionString(Connectionstring));
+            using IDbConnection db = new SQLiteConnection(_config.GetConnectionString(Connectionstring));
             return db.Query<T>(query, parameters, commandType: CommandType.Text).ToList();
         }
 
         public T IO<T>(string commandText, DynamicParameters parameters)
         {
             T result;
-            using IDbConnection db = new SqlConnection(_config.GetConnectionString(Connectionstring));
+            using IDbConnection db = new SQLiteConnection(_config.GetConnectionString(Connectionstring));
             try
             {
                 if (db.State == ConnectionState.Closed) db.Open();
